@@ -1,14 +1,35 @@
+//create global variable to store stickies
+listOfStickies = []; 
 
 //create stickies based on user text
-function userInputSticky(){
-	var textinput = prompt("What kinds of things stick for you?");
-	newSticky(textinput);
+function newSticky(textinput){
+	//check to see if text exists, else prompt user
+	if (textinput == undefined){
+		textinput = prompt("What kinds of things stick for you?");
+	}
 	
+	//create key value pairs to save all data for single sticky together
+	var stickyData = {
+		"text": textinput,
+		//generate random positions so stickies don't block header or create new button
+		"top": Math.random() * 50 + 25 + "%", 
+		"left": Math.random() * 100 + "%", 
+		//generate random colors for stickies
+		//got code from http://www.paulirish.com/2009/random-hex-color-code-snippets/
+		"color": '#'+Math.floor(Math.random()*16777215).toString(16)
+	}; 
+
+	//save sticky to list
+	listOfStickies.push(stickyData); 
+
+	//create a new sticky from user text and randomly generated values
+	displaySticky(stickyData.text, stickyData.top, stickyData.left, stickyData.color);
+
 }
 
 
 //create new sticky and new from my text
-function newSticky(textinput){
+function displaySticky(textinput, top, left, color){
 	//for each sticky, create a div with a paragraph and a delete button
 	var div = document.createElement("div");
 	var paragraph = document.createElement("p");
@@ -23,15 +44,14 @@ function newSticky(textinput){
 	div.appendChild(paragraph);
 	div.appendChild(button);
 
-	//set stickies to have random positions on page
+	//all stickies are set to absolute position
 	div.style.position = "absolute";
-	//limit sticky positions so they don't block header or create new button
-	div.style.top = Math.random() * 50 + 25 + "%";
-	div.style.left = Math.random() * 100 + "%";
+	//set sticky positions 
+	div.style.top = top;
+	div.style.left = left;
 
-	//set stickies to have random colors
-	//got code from http://www.paulirish.com/2009/random-hex-color-code-snippets/
-	div.style["background-color"] = '#'+Math.floor(Math.random()*16777215).toString(16);
+	//set sticky color
+	div.style["background-color"] = color;
 
 	//load user text inside of the paragraph
 	if (textinput != null) {
