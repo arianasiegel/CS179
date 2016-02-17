@@ -1,0 +1,19 @@
+
+body{
+	font-family: 'Coming Soon', cursive;
+}
+
+div{
+	height: 170px; width:170px;
+	font-family: 'Coming Soon', cursive;
+	border:1px solid gray;
+	padding:10px;
+  background-color:yellow;
+}
+
+#headerformat{
+	text-align: center;
+}
+
+
+
