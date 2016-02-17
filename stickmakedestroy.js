@@ -1,5 +1,5 @@
-//create global variable to store stickies
-listOfStickies = []; 
+//create global variable to store stickies locally
+listOfStickies = JSON.parse(localStorage.getItem("listOfStickies")); 
 
 //create stickies based on user text
 function newSticky(textinput){
@@ -21,21 +21,28 @@ function newSticky(textinput){
 
 	//save sticky to list
 	listOfStickies.push(stickyData); 
+	//put list above into local storage and "stringify" to
+	localStorage.setItem("listOfStickies", JSON.stringify(listOfStickies)); 
+
 
 	//create a new sticky from user text and randomly generated values
-	displaySticky(stickyData.text, stickyData.top, stickyData.left, stickyData.color);
+	displaySticky(stickyData.text, stickyData.top, stickyData.left, stickyData.color, listOfStickies.length - 1);
 
 }
 
 
 //create new sticky and new from my text
-function displaySticky(textinput, top, left, color){
+function displaySticky(textinput, top, left, color, index){
 	//for each sticky, create a div with a paragraph and a delete button
 	var div = document.createElement("div");
 	var paragraph = document.createElement("p");
 	var button = document.createElement("button");
 	button.onclick = function(){
 		document.body.removeChild(div);
+		//remove item from listofStickies array if deleted by user
+		listOfStickies.splice(index, 1);
+		//update local storage to mirror new array
+		localStorage.setItem("listOfStickies", JSON.stringify(listOfStickies)); 
 	};
 	//have button read as "delete"
 	button.innerHTML = "Delete";
@@ -60,12 +67,19 @@ function displaySticky(textinput, top, left, color){
 	document.body.appendChild(div);
 }
 
-//when page loads, create five stickies with my quotes
 window.onload = function(){
-	newSticky('"Disappointment is a sticky one." - Kristin Armstrong');
-	newSticky("Rolling Stones' Sticky Fingers");
-	newSticky('"I got sticky fingers, man." - J.B. Smoove');
-	newSticky('"Thoughts are fluid and words are sticky. That\'s the thing" - Daphne Guinness');
-	newSticky('"Even when freshly washed and relieved of all obvious confections, children tend to be sticky." - Fran Lebowitz');
+	for (var i = 0; i < listOfStickies.length; i++){
+		var sticky = listOfStickies[i];  
+		displaySticky(sticky.text, sticky.top, sticky.left, sticky.color, i); 
+	}
 };
+
+//when page loads, create five stickies with my quotes
+// window.onload = function(){
+// 	newSticky('"Disappointment is a sticky one." - Kristin Armstrong');
+// 	newSticky("Rolling Stones' Sticky Fingers");
+// 	newSticky('"I got sticky fingers, man." - J.B. Smoove');
+// 	newSticky('"Thoughts are fluid and words are sticky. That\'s the thing" - Daphne Guinness');
+// 	newSticky('"Even when freshly washed and relieved of all obvious confections, children tend to be sticky." - Fran Lebowitz');
+// };
 
